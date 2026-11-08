@@ -24,14 +24,15 @@ Mzansi Chat Zone is a production-grade, real-time messaging web application buil
 - **Backend**: Java 11 / Java 26, Java Servlet 4.0 (`javax.servlet-api`), JSR 356 WebSocket (`javax.websocket-api`).
 - **Password Security**: `at.favre.lib:bcrypt` (v0.10.2).
 - **JSON Serialization**: `org.json:json`.
-- **Database**: MySQL 8 / MariaDB (via `mysql-connector-j`).
+- **Database**: MySQL 8 / MariaDB / TiDB (via `mysql-connector-j`).
 - **Server**: Apache Tomcat 9.0.x (javax namespace).
 - **Frontend**: JSP, vanilla JavaScript (ES6+), HTML5 Canvas & MediaDevices API, CSS3.
 - **Build Tool**: Apache Maven (`war` packaging).
+- **Containerization**: Multi-stage Dockerfile (`maven:3.9` -> `tomcat:9.0-jdk11-temurin`).
 
 ---
 
-## 🗄️ Database Setup
+## 🗄️ Database Setup (Local)
 
 1. Start MySQL (e.g. through XAMPP or native service).
 2. Execute the provided [`schema.sql`](schema.sql) in your MySQL console or phpMyAdmin:
@@ -53,36 +54,40 @@ Mzansi Chat Zone is a production-grade, real-time messaging web application buil
 ## 🚀 Local Development Setup (NetBeans & Tomcat 9)
 
 1. **MySQL Driver in Tomcat**: Ensure `mysql-connector-j-8.0.33.jar` is placed in Tomcat's `lib/` directory (`apache-tomcat-9.0.x/lib`).
-2. **Context Configuration**: Check [`src/main/webapp/META-INF/context.xml`](src/main/webapp/META-INF/context.xml) to confirm database credentials:
-   ```xml
-   <Context path="/mzansi-chat-zone">
-       <Resource name="jdbc/MzansiChatZoneDB"
-                 auth="Container"
-                 type="javax.sql.DataSource"
-                 driverClassName="com.mysql.cj.jdbc.Driver"
-                 url="jdbc:mysql://localhost:3306/mzansi_chat_zone?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;characterEncoding=UTF-8"
-                 username="root"
-                 password=""
-                 maxTotal="20"
-                 maxIdle="10"
-                 minIdle="2"
-                 maxWaitMillis="10000"
-                 testOnBorrow="true"
-                 validationQuery="SELECT 1"/>
-   </Context>
-   ```
-3. **Build**:
-   In NetBeans, right-click the project and select **Clean and Build** (or run `mvn clean package`).
-4. **Run**:
-   Click **Run** in NetBeans. The application launches at:
+2. **Context Configuration**: Check [`src/main/webapp/META-INF/context.xml`](src/main/webapp/META-INF/context.xml) to confirm local database credentials.
+3. **Build & Run**:
+   In NetBeans, click **Clean and Build**, then **Run**. The application launches at:
    `http://localhost:8080/mzansi-chat-zone/`
 
 ---
 
-## 🚢 Production & Cloud Hosting Guide
+## ☁️ Free Cloud Deployment (Render + TiDB Cloud)
 
-For production deployments:
-1. **Containerized Deployment (Docker)**: Deploy a Tomcat 9 container (`tomcat:9-jdk11` or `tomcat:9-jdk17`) with the compiled `mzansi-chat-zone.war` placed in `/usr/local/tomcat/webapps/ROOT.war`.
-2. **Database Cloud Services**: Host the database on managed MySQL (AWS RDS, PlanetScale, Railway, or DigitalOcean Managed MySQL).
-3. **WebSocket Support**: Ensure the reverse proxy (Nginx, Traefik, AWS ALB, or Cloudflare) has WebSocket upgrading enabled (`Upgrade $http_upgrade`, `Connection "upgrade"`).
-4. **Environment Variables**: Externalize credentials using environment variables or JNDI server configuration in production `conf/server.xml` or `conf/context.xml`.
+You can host this application completely free of charge with **zero credit card required** using **Render** (free Docker Web Service) + **TiDB Cloud Starter** (free 5 GiB MySQL-compatible database).
+
+### Step 1: Create Free Database on TiDB Cloud
+1. Sign up for free at [tidbcloud.com](https://tidbcloud.com) (no credit card needed).
+2. Create a new **Serverless / Starter** cluster (MySQL-compatible).
+3. Under cluster settings, click **Connect**:
+   - Note down: `Host`, `Port` (usually `4000`), `User` (format: `xxxx.root`), and your generated `Password`.
+   - The default database is `test` (or create `mzansi_chat_zone`).
+4. In the TiDB Cloud Web SQL Console, paste and execute the contents of [`schema.sql`](schema.sql) to create the tables and seed users.
+
+### Step 2: Push Repository to GitHub
+```bash
+git remote add origin https://github.com/<your-username>/mzansi-chat-zone.git
+git push -u origin main
+```
+
+### Step 3: Deploy on Render
+1. Sign up at [render.com](https://render.com).
+2. Click **New +** → **Blueprint** and select your GitHub repository `mzansi-chat-zone`.
+3. Render will detect [`render.yaml`](render.yaml) and prompt for the environment variables:
+   - `DB_HOST`: Your TiDB Host (e.g. `gateway01.eu-central-1.prod.aws.tidbcloud.com`)
+   - `DB_PORT`: `4000`
+   - `DB_NAME`: `test` (or `mzansi_chat_zone`)
+   - `DB_USER`: Your TiDB user (e.g. `xxxx.root`)
+   - `DB_PASSWORD`: Your TiDB generated password
+   - `DB_SSL_MODE`: `REQUIRED`
+4. Click **Apply**. Render will automatically build the multi-stage Docker container, initialize Tomcat 9, and issue a free SSL certificate (`https://your-service.onrender.com`).
+5. Open your live HTTPS link: registration, live WebSocket chat, and camera photo capture are immediately operational!
