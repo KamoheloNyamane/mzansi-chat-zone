@@ -1,0 +1,27 @@
+# NetBeans & Maven build outputs
+target/
+*.war
+*.jar
+*.class
+
+# Logs & temp files
+*.log
+messages_log.txt
+java_files*.txt
+folder_structure.txt
+nb_j2ee.txt
+tomcat_paths.txt
+
+# Scratch scripts
+scratch/
+
+# IDE specific user settings
+nbproject/private/
+.idea/
+*.iml
+.vscode/
+
+# OS specific files
+Thumbs.db
+Desktop.ini
+.DS_Store

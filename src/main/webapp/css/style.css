@@ -1,0 +1,674 @@
+/* ==========================================================================
+   Mzansi Chat Zone — stylesheet
+   A warm, mobile-first chat UI. Fraunces carries the brand moment on the
+   login screen; Manrope handles every dense, small-scale UI surface.
+   ========================================================================== */
+
+:root {
+    --color-bg: #F4F6FA;
+    --color-surface: #FFFFFF;
+    --color-primary: #2F6FED;
+    --color-primary-dark: #1E4FBE;
+    --color-primary-tint: #EAF0FE;
+    --color-accent: #E85D4C;
+    --color-ink: #1A1D29;
+    --color-muted: #6B7280;
+    --color-border: #E5E8EE;
+    --color-success: #2FA86A;
+    --color-danger: #D64545;
+    --color-danger-tint: #FDECEA;
+
+    --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --font-body: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-pill: 999px;
+
+    --shadow-card: 0 1px 2px rgba(20, 24, 40, 0.04), 0 8px 24px rgba(20, 24, 40, 0.06);
+    --shadow-float: 0 12px 32px rgba(30, 79, 190, 0.18);
+
+    --shell-width: 480px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--color-bg);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.15;
+    margin: 0 0 8px;
+}
+
+p {
+    margin: 0 0 12px;
+}
+
+a {
+    color: var(--color-primary);
+    text-decoration: none;
+}
+
+button, input, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001ms !important;
+        transition-duration: 0.001ms !important;
+    }
+}
+
+/* ---------- Shell ---------- */
+
+.shell {
+    max-width: var(--shell-width);
+    margin: 0 auto;
+    min-height: 100vh;
+    background: var(--color-bg);
+    display: flex;
+    flex-direction: column;
+}
+
+.shell--centered {
+    justify-content: center;
+    padding: 32px 24px;
+}
+
+/* ---------- Buttons ---------- */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 13px 24px;
+    border-radius: var(--radius-pill);
+    border: none;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    color: #fff;
+    box-shadow: var(--shadow-float);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-dark);
+}
+
+.btn-secondary {
+    background: var(--color-surface);
+    color: var(--color-primary);
+    border: 1.5px solid var(--color-border);
+}
+
+.btn-secondary:hover {
+    border-color: var(--color-primary);
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-icon {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border-radius: 50%;
+    flex: none;
+}
+
+/* ---------- Forms ---------- */
+
+.field {
+    margin-bottom: 14px;
+}
+
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-muted);
+    margin-bottom: 6px;
+}
+
+.field input {
+    width: 100%;
+    padding: 13px 16px;
+    border-radius: var(--radius-md);
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.field input:focus {
+    border-color: var(--color-primary);
+    outline: none;
+}
+
+.form-error {
+    background: var(--color-danger-tint);
+    color: var(--color-danger);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin-bottom: 16px;
+}
+
+.form-success {
+    background: #E9F8EF;
+    color: var(--color-success);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    font-size: 13.5px;
+    margin-bottom: 16px;
+}
+
+/* ---------- Auth (login/register) ---------- */
+
+.auth-brand {
+    text-align: center;
+    margin-bottom: 36px;
+}
+
+.auth-brand .wordmark {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 600;
+    color: var(--color-accent);
+    letter-spacing: -0.01em;
+}
+
+.auth-brand .tagline {
+    color: var(--color-muted);
+    font-size: 14px;
+    margin-top: 6px;
+}
+
+.auth-card {
+    background: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    padding: 28px 24px;
+}
+
+.auth-switch {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 14px;
+    color: var(--color-muted);
+}
+
+/* ---------- App header (used on home/conversations/conversation/camera) ---------- */
+
+.app-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    background: var(--color-bg);
+    z-index: 5;
+}
+
+.app-header h1 {
+    font-size: 20px;
+}
+
+.app-header .back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-ink);
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--color-ink);
+}
+
+/* ---------- Home ---------- */
+
+.home-hero {
+    margin: 4px 20px 24px;
+    padding: 28px 24px;
+    border-radius: var(--radius-lg);
+    background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary) 65%, #6B8CF5);
+    color: #fff;
+    box-shadow: var(--shadow-float);
+}
+
+.home-hero .greeting {
+    font-family: var(--font-display);
+    font-size: 26px;
+    margin-bottom: 4px;
+}
+
+.home-hero .subline {
+    opacity: 0.88;
+    font-size: 14.5px;
+}
+
+.home-nav {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.home-nav-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+    padding: 18px 18px;
+    box-shadow: var(--shadow-card);
+    color: var(--color-ink);
+    font-weight: 600;
+}
+
+.home-nav-card .nav-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--color-primary-tint);
+    color: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
+.home-nav-card .nav-copy {
+    flex: 1;
+}
+
+.home-nav-card .nav-meta {
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--color-muted);
+    margin-top: 2px;
+}
+
+.home-logout {
+    text-align: center;
+    padding: 28px 20px;
+}
+
+.home-logout a {
+    color: var(--color-muted);
+    font-size: 13.5px;
+}
+
+/* ---------- Conversations list ---------- */
+
+.new-chat-bar {
+    padding: 0 20px 16px;
+}
+
+.new-chat-bar form {
+    display: flex;
+    gap: 8px;
+}
+
+.new-chat-bar input {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: var(--radius-pill);
+    border: 1.5px solid var(--color-border);
+    background: var(--color-surface);
+}
+
+.conversation-list {
+    list-style: none;
+    margin: 0;
+    padding: 0 12px 24px;
+    flex: 1;
+}
+
+.conversation-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 8px;
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: inherit;
+}
+
+.conversation-row:hover {
+    background: var(--color-surface);
+}
+
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--color-primary-tint);
+    color: var(--color-primary-dark);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
+.conversation-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.conversation-name {
+    font-weight: 700;
+    font-size: 15.5px;
+}
+
+.conversation-preview {
+    color: var(--color-muted);
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.conversation-time {
+    color: var(--color-muted);
+    font-size: 12px;
+    flex: none;
+    align-self: flex-start;
+    margin-top: 2px;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 48px 32px;
+    color: var(--color-muted);
+}
+
+.empty-state .empty-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    color: var(--color-ink);
+    margin-bottom: 6px;
+}
+
+/* ---------- Conversation thread ---------- */
+
+.thread-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--color-surface);
+    box-shadow: var(--shadow-card);
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+}
+
+.thread-header .avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 14px;
+}
+
+.thread-header .name {
+    font-weight: 700;
+    font-size: 15.5px;
+}
+
+.message-list {
+    flex: 1;
+    padding: 18px 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    overflow-y: auto;
+}
+
+.bubble-row {
+    display: flex;
+    margin-bottom: 6px;
+}
+
+.bubble-row.mine {
+    justify-content: flex-end;
+}
+
+.bubble {
+    max-width: 78%;
+    padding: 10px 14px;
+    font-size: 14.5px;
+    line-height: 1.4;
+    border-radius: 18px;
+    box-shadow: 0 1px 1px rgba(20, 24, 40, 0.04);
+}
+
+.bubble-row.theirs .bubble {
+    background: var(--color-surface);
+    border-bottom-left-radius: 5px;
+    color: var(--color-ink);
+}
+
+.bubble-row.mine .bubble {
+    background: var(--color-primary);
+    border-bottom-right-radius: 5px;
+    color: #fff;
+}
+
+.bubble img {
+    border-radius: 12px;
+    max-width: 220px;
+    margin-bottom: 2px;
+}
+
+.bubble-time {
+    font-size: 10.5px;
+    opacity: 0.7;
+    margin-top: 4px;
+    display: block;
+}
+
+.thread-error {
+    text-align: center;
+    font-size: 12.5px;
+    color: var(--color-danger);
+    padding: 4px 0;
+}
+
+.composer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    background: var(--color-bg);
+}
+
+.composer form {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--color-surface);
+    border-radius: var(--radius-pill);
+    box-shadow: var(--shadow-card);
+    padding: 6px 6px 6px 18px;
+}
+
+.composer input[type="text"] {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 0;
+}
+
+.composer input[type="text"]:focus {
+    outline: none;
+}
+
+.composer .camera-link {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary-tint);
+    color: var(--color-primary-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+}
+
+.composer .send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    color: #fff;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: none;
+}
+
+.connection-pill {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--color-muted);
+    padding: 4px 0 10px;
+}
+
+.connection-pill.offline {
+    color: var(--color-danger);
+}
+
+/* ---------- Camera page ---------- */
+
+.camera-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0 16px 16px;
+}
+
+.camera-viewport {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    background: #10121B;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-card);
+}
+
+.camera-viewport video,
+.camera-viewport canvas,
+.camera-viewport img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    inset: 0;
+}
+
+.camera-viewport .hint {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #C9CDDC;
+    font-size: 13.5px;
+    text-align: center;
+    padding: 24px;
+}
+
+.camera-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 22px 0 8px;
+}
+
+.shutter-btn {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--color-primary);
+    cursor: pointer;
+}
+
+.camera-context {
+    text-align: center;
+    color: var(--color-muted);
+    font-size: 13.5px;
+    padding: 4px 0 14px;
+}
+
+/* ---------- Misc ---------- */
+
+.text-center {
+    text-align: center;
+}
+
+.container-narrow {
+    padding: 0 20px;
+}
