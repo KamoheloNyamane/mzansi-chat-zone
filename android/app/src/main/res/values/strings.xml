@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">ChatApp</string>
+    <string name="welcome_to_chatapp">Welcome to ChatApp!</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="conversations">Conversations</string>
+    <string name="type_a_message">Type a message</string>
+    <string name="send">Send</string>
+    <string name="camera">Camera</string>
+    <string name="capture_photo">Capture Photo</string>
+    <string name="phone_login">Sign In with Phone / OTP</string>
+</resources>

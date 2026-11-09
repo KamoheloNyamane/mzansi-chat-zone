@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_vertical"
+    android:background="@color/bg_light"
+    tools:context=".activities.PhoneAuthActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Phone Authentication"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/purple_700" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Enter your mobile number to receive a 6-digit OTP code, just like WhatsApp."
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="@color/text_muted"
+        android:layout_marginBottom="24dp" />
+
+    <EditText
+        android:id="@+id/phone_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Mobile Number (+27 ...)"
+        android:inputType="phone"
+        android:layout_marginBottom="16dp" />
+
+    <Button
+        android:id="@+id/btn_send_otp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send OTP Code"
+        android:layout_marginBottom="24dp" />
+
+    <LinearLayout
+        android:id="@+id/otp_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/otp_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter 6-digit OTP (e.g. 123456)"
+            android:inputType="number"
+            android:letterSpacing="0.2"
+            android:gravity="center"
+            android:maxLength="6"
+            android:layout_marginBottom="16dp" />
+
+        <Button
+            android:id="@+id/btn_verify_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Verify &amp; Continue"
+            android:layout_marginBottom="16dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_cancel_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Back to Username &amp; Password"
+        style="@style/Widget.MaterialComponents.Button.TextButton" />
+
+</LinearLayout>
