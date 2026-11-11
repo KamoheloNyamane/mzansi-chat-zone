@@ -1,6 +1,7 @@
 package com.example.chatapp.database;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "messages")
@@ -22,6 +23,7 @@ public class Message {
     public Message() {
     }
 
+    @Ignore
     public Message(String sender, String receiver, String content, long timestamp) {
         this.sender = sender;
         this.receiver = receiver;
