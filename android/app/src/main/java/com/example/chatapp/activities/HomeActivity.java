@@ -16,6 +16,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private Button conversationsButton;
     private Button cameraButton;
+    private Button settingsButton;
     private Button logoutButton;
     private TextView welcomeTextView;
 
@@ -26,15 +27,11 @@ public class HomeActivity extends AppCompatActivity {
 
         conversationsButton = findViewById(R.id.btn_conversations);
         cameraButton = findViewById(R.id.btn_camera);
+        settingsButton = findViewById(R.id.btn_settings);
         logoutButton = findViewById(R.id.btn_logout);
         welcomeTextView = findViewById(R.id.welcome_text);
 
-        SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
-        String currentUser = prefs.getString(Constants.KEY_LOGGED_IN_USER, "User");
-
-        if (welcomeTextView != null) {
-            welcomeTextView.setText("Welcome to ChatApp, " + currentUser + "!");
-        }
+        updateWelcomeText();
 
         conversationsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,10 +51,21 @@ public class HomeActivity extends AppCompatActivity {
             });
         }
 
+        if (settingsButton != null) {
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(HomeActivity.this, SettingsActivity.class);
+                    startActivity(intent);
+                }
+            });
+        }
+
         if (logoutButton != null) {
             logoutButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
                     prefs.edit().remove(Constants.KEY_LOGGED_IN_USER).apply();
                     Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -65,6 +73,20 @@ public class HomeActivity extends AppCompatActivity {
                     finish();
                 }
             });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateWelcomeText();
+    }
+
+    private void updateWelcomeText() {
+        SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
+        String currentUser = prefs.getString(Constants.KEY_LOGGED_IN_USER, "User");
+        if (welcomeTextView != null) {
+            welcomeTextView.setText("Welcome to ChatApp, " + currentUser + "!");
         }
     }
 }

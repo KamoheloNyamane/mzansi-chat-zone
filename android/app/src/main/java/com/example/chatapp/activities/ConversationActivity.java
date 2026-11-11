@@ -77,6 +77,20 @@ public class ConversationActivity extends AppCompatActivity {
         }
 
         // Connect to Cloud WebSocket Server for Physical Device-to-Device Messaging
+        if (statusTextView != null) {
+            statusTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (webSocketClient == null || !webSocketClient.isOpen()) {
+                        statusTextView.setText("⏳ Connecting to Cloud Relay...");
+                        statusTextView.setBackgroundColor(0xFFFEF0C7);
+                        statusTextView.setTextColor(0xFFB54708);
+                        initWebSocket();
+                    }
+                }
+            });
+        }
+
         initWebSocket();
 
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -188,7 +202,7 @@ public class ConversationActivity extends AppCompatActivity {
                         @Override
                         public void run() {
                             if (statusTextView != null) {
-                                statusTextView.setText("○ Cloud Relay Offline (Local Storage Active)");
+                                statusTextView.setText("○ Cloud Relay Offline (Tap to Reconnect)");
                                 statusTextView.setBackgroundColor(0xFFFEE4E2);
                                 statusTextView.setTextColor(0xFFB42318);
                             }
@@ -201,6 +215,16 @@ public class ConversationActivity extends AppCompatActivity {
                     Log.e(TAG, "WebSocket Error: " + ex.getMessage());
                 }
             };
+
+            if (Constants.WEBSOCKET_URL.startsWith("wss://")) {
+                try {
+                    javax.net.ssl.SSLContext sslContext = javax.net.ssl.SSLContext.getInstance("TLS");
+                    sslContext.init(null, null, null);
+                    webSocketClient.setSocketFactory(sslContext.getSocketFactory());
+                } catch (Exception e) {
+                    Log.e(TAG, "SSLContext setup: " + e.getMessage());
+                }
+            }
 
             webSocketClient.connect();
 

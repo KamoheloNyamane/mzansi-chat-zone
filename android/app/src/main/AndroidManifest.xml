@@ -47,6 +47,10 @@
             android:name=".activities.PhoneAuthActivity"
             android:exported="false" />
 
+        <activity
+            android:name=".activities.SettingsActivity"
+            android:exported="false" />
+
     </application>
 
 </manifest>

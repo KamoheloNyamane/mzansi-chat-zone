@@ -4,6 +4,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -12,6 +13,9 @@ public interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertUser(User user);
+
+    @Update
+    void updateUser(User user);
 
     @Query("SELECT * FROM users WHERE username = :username LIMIT 1")
     User getUserByUsername(String username);

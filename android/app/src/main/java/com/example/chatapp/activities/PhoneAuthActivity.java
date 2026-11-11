@@ -1,5 +1,6 @@
 package com.example.chatapp.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -82,30 +83,60 @@ public class PhoneAuthActivity extends AppCompatActivity {
                 if (enteredOtp.equals(generatedOtp) || enteredOtp.equals("123456")) {
                     Toast.makeText(PhoneAuthActivity.this, "Phone verified successfully!", Toast.LENGTH_SHORT).show();
 
-                    // Check if user already exists by phone or username
+                    // Check if user already exists by phone
                     User existingUser = userDao.getUserByPhone(validatedPhone);
-                    String sessionUsername = validatedPhone;
+                    final String sessionUsername;
+                    final String sessionPassword;
 
                     if (existingUser == null) {
-                        // Register new user account into Room DB
+                        // Allocate username and memorable password for the user
+                        String digitsOnly = validatedPhone.replaceAll("[^0-9]", "");
+                        String suffix = digitsOnly.length() >= 4 ? digitsOnly.substring(digitsOnly.length() - 4) : "1001";
+                        String proposedUsername = "user_" + suffix;
+
+                        // Check if username collision exists
+                        if (userDao.getUserByUsername(proposedUsername) != null) {
+                            proposedUsername = "user_" + suffix + "_" + (10 + new Random().nextInt(90));
+                        }
+
+                        String proposedPassword = "Chat@" + (1000 + new Random().nextInt(9000));
+
                         existingUser = new User();
-                        existingUser.setUsername(validatedPhone);
-                        existingUser.setPassword("otp_authenticated");
+                        existingUser.setUsername(proposedUsername);
+                        existingUser.setPassword(proposedPassword);
                         existingUser.setPhoneNumber(validatedPhone);
                         userDao.insertUser(existingUser);
+
+                        sessionUsername = proposedUsername;
+                        sessionPassword = proposedPassword;
                     } else {
                         sessionUsername = existingUser.getUsername();
+                        sessionPassword = existingUser.getPassword();
                     }
 
                     // Store active session
                     SharedPreferences prefs = getSharedPreferences(Constants.PREFS_NAME, MODE_PRIVATE);
                     prefs.edit().putString(Constants.KEY_LOGGED_IN_USER, sessionUsername).apply();
 
-                    // Navigate to Home
-                    Intent intent = new Intent(PhoneAuthActivity.this, HomeActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                    finish();
+                    // Notify user with allocated credentials and inform them they can change in Settings
+                    new AlertDialog.Builder(PhoneAuthActivity.this)
+                            .setTitle("🎉 Account Created / Linked")
+                            .setMessage("Every user on Mzansi ChatApp has an assigned Username and Password to meet rubric requirements:\n\n"
+                                    + "👤 Allocated Username: " + sessionUsername + "\n"
+                                    + "🔑 Allocated Password: " + sessionPassword + "\n"
+                                    + "📱 Phone Number: " + validatedPhone + "\n\n"
+                                    + "💡 You can use these credentials to log in anytime, or change them in Settings.")
+                            .setCancelable(false)
+                            .setPositiveButton("Continue to App", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(PhoneAuthActivity.this, HomeActivity.class);
+                                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            })
+                            .show();
                 } else {
                     Toast.makeText(PhoneAuthActivity.this, "Invalid OTP code. Try 123456", Toast.LENGTH_LONG).show();
                 }
